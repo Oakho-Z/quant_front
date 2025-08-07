@@ -10,7 +10,7 @@ export const DrawdownChart: React.FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`${baseUrl}/run_pipeline`)  // 后端接口地址，根据实际改
+    fetch(`${baseUrl}/drawdown_data`)  // 后端接口地址，根据实际改
       .then(res => {
         if (!res.ok) throw new Error(`请求错误: ${res.status}`);
         return res.json();
