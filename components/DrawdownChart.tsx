@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import type { DrawdownData } from '../types';
+const baseUrl = import.meta.env.VITE_API_BASE;
 
 export const DrawdownChart: React.FC = () => {
   const [data, setData] = useState<DrawdownData[] | null>(null);
@@ -9,7 +10,7 @@ export const DrawdownChart: React.FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch('http://localhost:5053/drawdown_data')  // 后端接口地址，根据实际改
+    fetch('${baseUrl}/drawdown_data')  // 后端接口地址，根据实际改
       .then(res => {
         if (!res.ok) throw new Error(`请求错误: ${res.status}`);
         return res.json();
