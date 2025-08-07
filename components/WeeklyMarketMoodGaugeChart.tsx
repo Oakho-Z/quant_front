@@ -9,7 +9,7 @@ import {
 interface GaugeData {
   value: number;
 }
-
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 const SEGMENTS = [
   { name: '极弱', color: '#FF5252' },
   { name: '偏弱', color: '#FFA726' },
@@ -27,7 +27,7 @@ export const WeeklyMarketMoodGaugeChart: React.FC = () => {
 
   // 拉取数据
   useEffect(() => {
-    fetch('/weekly_market_mood_gauge_data')
+    fetch(`${baseUrl}//weekly_market_mood_gauge_data`)
       .then(res => {
         if (!res.ok) throw new Error('数据请求失败');
         return res.json();
