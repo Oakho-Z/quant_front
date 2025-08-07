@@ -47,43 +47,57 @@ export const PipelineTab: React.FC<PipelineTabProps> = ({ onPipelineComplete, co
   }, [progress, isRunning]);
 
   const handleRunPipeline = () => {
-    if (isRunning || completed) return;
+  if (isRunning || completed) return;
 
-    setIsRunning(true);
-    setProgress(0);
-    setStatusText("🚀 Pipeline started...");
-    setCompleted(false);
+  setIsRunning(true);
+  setProgress(0);
+  setStatusText("🚀 Pipeline started...");
+  setCompleted(false);
 
-    fetch(`${baseUrl}/run_pipeline`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        gamma: config.gamma,
-        top_n: config.topN
-      }),
+  fetch(`${baseUrl}/run_pipeline`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      gamma: config.gamma,
+      top_n: config.topN
+    }),
+  })
+    .then(response => response.json())
+    .then(data => {
+      const taskId = data.task_id;
+      const pollInterval = setInterval(() => {
+        fetch(`${baseUrl}/pipeline_status/${taskId}`)
+          .then(res => res.json())
+          .then(statusData => {
+            if (statusData.status === 'running') {
+              setStatusText("⏳ Pipeline running...");
+              setProgress(p => Math.min(p + 2, 80));
+            } else if (statusData.status === 'completed') {
+              clearInterval(pollInterval);
+              setStatusText("✅ Pipeline completed successfully!");
+              setProgress(100);
+              setCompleted(true);
+              setIsRunning(false);
+              onPipelineComplete();
+            } else if (statusData.status === 'failed') {
+              clearInterval(pollInterval);
+              setStatusText("❌ Pipeline failed: " + statusData.error);
+              setIsRunning(false);
+            }
+          })
+          .catch(err => {
+            clearInterval(pollInterval);
+            setStatusText("❌ Pipeline polling failed.");
+            setIsRunning(false);
+          });
+      }, 5000); // 每 5 秒轮询一次
     })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Pipeline execution failed');
-        }
-        return response.json();
-      })
-      .then(data => {
-        // 请求完成，进度条直接跳到100%
-        setProgress(100);
-        setStatusText("✅ Pipeline completed successfully!");
-        setCompleted(true);
-        setIsRunning(false);
-        onPipelineComplete();
-      })
-      .catch(error => {
-        console.error('Pipeline failed:', error);
-        setStatusText("❌ Pipeline failed.");
-        setIsRunning(false);
-      });
-
-  };
-
+    .catch(error => {
+      console.error('Pipeline submission failed:', error);
+      setStatusText("❌ Pipeline start failed.");
+      setIsRunning(false);
+    });
+};
   const getStageStatus = (stageIndex: number) => {
     if (progress >= ((stageIndex + 1) * 33.33)) return 'completed';
     if (progress >= (stageIndex * 33.33) && isRunning) return 'running';
