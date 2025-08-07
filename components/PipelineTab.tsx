@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+const baseUrl = import.meta.env.VITE_API_BASE;
 const pipelineStages = [
   "Station 1: Fetching crypto OHLCV data & CoinDesk news",
   "Station 2: Feature engineering (momentum, volatility, sentiment)",
