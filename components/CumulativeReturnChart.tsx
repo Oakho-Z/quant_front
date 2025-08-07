@@ -13,7 +13,7 @@ export const CumulativeReturnChart: React.FC<CumulativeReturnChartProps> = () =>
 
   useEffect(() => {
     setLoading(true);
-    fetch('/performance_data')
+    fetch('${baseUrl}/performance_data')
       .then(res => {
         if (!res.ok) throw new Error('数据请求失败');
         return res.json();
