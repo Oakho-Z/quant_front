@@ -54,7 +54,7 @@ export const PipelineTab: React.FC<PipelineTabProps> = ({ onPipelineComplete, co
     setStatusText("🚀 Pipeline started...");
     setCompleted(false);
 
-    fetch('${baseUrl}/run_pipeline', {
+    fetch(`${baseUrl}/run_pipeline`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
