@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from 'recharts';
 import type { TimeSeriesData } from '../types';
-
+const baseUrl = import.meta.env.VITE_API_BASE;
 interface CumulativeReturnChartProps {
   // 不再通过 props 传入数据了
 }
