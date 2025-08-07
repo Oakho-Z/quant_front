@@ -9,7 +9,7 @@ import {
 interface GaugeData {
   value: number;
 }
-const baseUrl = import.meta.env.VITE_API_BASE_URL;
+const baseUrl = import.meta.env.VITE_API_BASE;
 const SEGMENTS = [
   { name: '极弱', color: '#FF5252' },
   { name: '偏弱', color: '#FFA726' },
