@@ -27,7 +27,7 @@ export const WeeklyMarketMoodGaugeChart: React.FC = () => {
 
   // 拉取数据
   useEffect(() => {
-    fetch(`${baseUrl}//weekly_market_mood_gauge_data`)
+    fetch(`${baseUrl}/weekly_market_mood_gauge_data`)
       .then(res => {
         if (!res.ok) throw new Error('数据请求失败');
         return res.json();
