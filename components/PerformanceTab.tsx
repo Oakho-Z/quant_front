@@ -18,7 +18,7 @@ export const PerformanceTab: React.FC<PerformanceTabProps> = ({ geminiApiKey }) 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch('${baseUrl}/performance_tab_chart_data');
+        const res = await fetch(`${baseUrl}/performance_tab_chart_data`);
         if (!res.ok) throw new Error('Failed to fetch chart data');
         const data = await res.json();
   
